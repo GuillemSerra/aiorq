@@ -2,8 +2,8 @@ import pickle
 
 from aioredis import Redis
 
-from aiorq.backends import redis_conn
-from .entities import Job
+from backends import redis_conn
+from jobs import Job
 
 
 @redis_conn

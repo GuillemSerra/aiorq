@@ -1,8 +1,7 @@
 import uuid
 from datetime import datetime
 
-from jobs import repos
-from jobs.entities import Job
+from jobs import repos, Job
 
 
 async def enqueue_job_use_case(job: Job) -> Job:

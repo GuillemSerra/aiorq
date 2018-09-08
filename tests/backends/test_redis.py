@@ -1,7 +1,6 @@
 import pytest
 
-from aiorq.backends import get_conn, init_redis, redis_conn
-
+from backends import get_conn, init_redis, redis_conn, stop_redis
 
 pytestmark = pytest.mark.asyncio
 
@@ -13,6 +12,7 @@ async def setup_redis(event_loop):
 
     redis = get_conn()
     await redis.flushall()
+    await stop_redis()
 
 
 async def test_redis_conn():

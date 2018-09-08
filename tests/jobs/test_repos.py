@@ -2,9 +2,9 @@ import asyncio
 
 import pytest
 
-from aiorq.backends import get_conn, init_redis
-from aiorq.jobs import Job
-from aiorq.jobs.repos import enqueue_job
+from backends import get_conn, init_redis, stop_redis
+from jobs import Job
+from jobs.repos import enqueue_job
 
 
 pytestmark = pytest.mark.asyncio
@@ -17,10 +17,11 @@ async def redis(event_loop):
     yield redis
 
     await redis.flushall()
+    await stop_redis()
 
 
 async def test_enqueue_job(redis):
-    job = Job(id='fake_id', task=asyncio.sleep(1))
+    job = Job(id='fake_id', task=asyncio.sleep)
 
     await enqueue_job(job)
 
