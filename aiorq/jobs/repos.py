@@ -7,8 +7,6 @@ from .entities import Job
 
 
 @redis_conn
-async def enqueue_job(redis: Redis, job: Job) -> Job:
-    await redis.set(Job.id, pickle.dumps(Job))
-    await redis.lpush(Job.queue, Job.id)
-
-    return Job
+async def enqueue_job(redis: Redis, job: Job):
+    await redis.set(job.id, pickle.dumps(job))
+    await redis.lpush(job.queue, job.id)
