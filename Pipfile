@@ -6,3 +6,4 @@
 "pyre-check"="*"
 "pytest"="*"
 "pytest-asyncio"="*"
+"pytest-mock"="*"

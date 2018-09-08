@@ -1,6 +1,5 @@
 import asyncio
 import functools
-from typing import Coroutine
 
 from aioredis import create_redis_pool
 
@@ -21,9 +20,19 @@ async def init_redis(loop: asyncio.BaseEventLoop):
                                    loop=loop)
 
 
-def redis_conn(f: Coroutine) -> Coroutine:
+async def stop_redis():
+    global pool
+    pool.close()
+    await pool.wait_closed()
+
+
+def redis_conn(f):
     @functools.wraps(f)
     async def wrapper(*args, **kwargs):
         return await f(pool, *args, **kwargs)
 
     return wrapper
+
+
+def get_conn():
+    return pool

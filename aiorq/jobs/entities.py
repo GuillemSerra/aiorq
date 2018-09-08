@@ -5,10 +5,12 @@ from typing import Coroutine
 
 @dataclass
 class Job:
-    id: int
-    task: Coroutine
+    id: str = ''
+    task: Coroutine = None
+    queue: str = 'default'
     name: str = ''
-    start_time: datetime = datetime.now()
+    queued_time: datetime = None
+    start_time: datetime = None
     end_time: datetime = None
 
     def __eq__(self, other):

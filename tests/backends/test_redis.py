@@ -1,20 +1,18 @@
-from aiorq.backends.redis import redis_conn, init_redis
 import pytest
 
-# All test coroutines will be treated as marked.
+from backends import get_conn, init_redis, redis_conn, stop_redis
+
 pytestmark = pytest.mark.asyncio
 
 
 @pytest.fixture(autouse=True)
-async def clean_redis(event_loop):
+async def setup_redis(event_loop):
     await init_redis(event_loop)
     yield
 
-    @redis_conn
-    async def clean(conn):
-        await conn.flushall()
-
-    await clean()
+    redis = get_conn()
+    await redis.flushall()
+    await stop_redis()
 
 
 async def test_redis_conn():
