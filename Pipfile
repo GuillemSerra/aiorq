@@ -1,1 +1,8 @@
-aioredis='*'
+[packages]
+"aioredis"="*"
+
+[dev-packages]
+"flake8" = "*"
+"pyre-check"="*"
+"pytest"="*"
+"pytest-asyncio"="*"
