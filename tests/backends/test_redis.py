@@ -1,21 +1,12 @@
 import pytest
 
-from backends import get_conn, init_redis, redis_conn, stop_redis
+from backends import redis_conn
+
 
 pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture(autouse=True)
-async def setup_redis(event_loop):
-    await init_redis(event_loop)
-    yield
-
-    redis = get_conn()
-    await redis.flushall()
-    await stop_redis()
-
-
-async def test_redis_conn():
+async def test_redis_conn(redis):
     @redis_conn
     async def add_data(conn):
         await conn.set('key', 'value')
