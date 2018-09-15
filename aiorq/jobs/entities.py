@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Coroutine
+from typing import Callable
 
 
 @dataclass
 class Job:
     id: str = ''
-    task: Coroutine = None
-    queue: str = 'default'
+    task: Callable = None
+    queue_id: str = 'default'
     name: str = ''
     queued_time: datetime = None
     start_time: datetime = None
