@@ -26,14 +26,11 @@ class TestEnqueueJobUseCase:
 
 
 async def test_execute_job_use_case():
-    variable_to_change_when_task_executed = 0
+    async def task():
+        return 1
 
-    async def task_to_change_variable():
-        global variable_to_change_when_task_executed
-        variable_to_change_when_task_executed = 1
+    job = Job(task=task)
 
-    job = Job(task=task_to_change_variable)
+    result = await execute_job_use_case(job)
 
-    await execute_job_use_case(job)
-
-    assert variable_to_change_when_task_executed == 1
+    assert result == 1
