@@ -1,9 +1,10 @@
 [packages]
-"aioredis"="*"
+aioredis = "*"
+uvloop = "*"
 
 [dev-packages]
-"flake8" = "*"
-"pyre-check"="*"
-"pytest"="*"
-"pytest-asyncio"="*"
-"pytest-mock"="*"
+flake8 = "*"
+pyre-check = "*"
+pytest = "*"
+pytest-asyncio = "*"
+pytest-mock = "*"
