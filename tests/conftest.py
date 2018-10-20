@@ -1,6 +1,6 @@
 import pytest
 
-from backends import get_conn, init_redis, stop_redis
+from aiorq.backends import get_conn, init_redis, stop_redis
 
 
 @pytest.fixture

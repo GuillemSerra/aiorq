@@ -1,22 +1,21 @@
 import pytest
 
-from aiorq.consumer import consume_queue
-from jobs import Job, enqueue_job_use_case
+from consumer import ConsumeQueue
+from jobs import Job, EnqueueJobUseCase
 from queues import Queue
 
 
 pytestmark = pytest.mark.asyncio
 
 
-async def task():
-    return 1
-
-
 async def test_consumer_integration(redis):
+    async def task():
+        return 1
+
     queue = Queue(id='test_queue')
     job = Job(queue_id=queue.id, task=task)
-    await enqueue_job_use_case(job)
+    await EnqueueJobUseCase(job).execute()
 
-    result = await consume_queue(queue)
+    result = await ConsumeQueue(queue).execute()
 
     assert result == 1
