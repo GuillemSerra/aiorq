@@ -1,21 +1,36 @@
 import uuid
 from datetime import datetime
 
-from jobs import repos, Job
+from dataclasses import dataclass
+from jobs import Job
+from jobs.repos import JobRepo
 
 
-async def enqueue_job_use_case(job: Job) -> Job:
-    job.id = str(uuid.uuid4())
-    job.queued_time = datetime.now()
+@dataclass
+class EnqueueJobUseCase:
+    job: Job
+    _job_repo: JobRepo = JobRepo()
 
-    await repos.enqueue_job(job)
+    async def execute(self) -> Job:
+        self.job.id = str(uuid.uuid4())
+        self.job.queued_time = datetime.now()
+        await self._job_repo.enqueue(self.job)
 
-    return job
+        return self.job
 
 
-async def get_job_use_case(queue_id: str) -> Job:
-    return await repos.get_job(queue_id)
+@dataclass
+class GetJobUseCase:
+    queue_id: str
+    _job_repo: JobRepo = JobRepo()
+
+    async def execute(self) -> Job:
+        return await self._job_repo.get(self.queue_id)
 
 
-async def execute_job_use_case(job: Job):
-    return await job.task()
+@dataclass
+class ExecuteJobUseCase:
+    job: Job
+
+    async def execute(self):
+        return await self.job.task()

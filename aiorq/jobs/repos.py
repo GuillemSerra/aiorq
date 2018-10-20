@@ -2,20 +2,20 @@ import pickle
 
 from aioredis import Redis
 
-from backends import redis_conn
+from backends import get_conn
+from dataclasses import dataclass
 from jobs import Job
 
 
-@redis_conn
-async def enqueue_job(redis: Redis, job: Job):
-    await redis.set(job.id, pickle.dumps(job))
-    await redis.lpush(job.queue_id, job.id)
+@dataclass
+class JobRepo:
+    _redis: Redis = get_conn()
 
+    async def enqueue(self, job: Job):
+        await self._redis.set(job.id, pickle.dumps(job))
+        await self._redis.lpush(job.queue_id, job.id)
 
-@redis_conn
-async def get_job(redis: Redis, queue_id: str) -> Job:
-    _queue, job_id = await redis.brpop(queue_id)
-    job = await redis.get(job_id)
-    job_entity = pickle.loads(job)
-
-    return job_entity
+    async def get(self, queue_id: str) -> Job:
+        _queue, job_id = await self._redis.brpop(queue_id)
+        job = await self._redis.get(job_id)
+        return pickle.loads(job)
